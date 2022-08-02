@@ -1,8 +1,11 @@
 import org.jobrunr.configuration.JobRunr;
 import org.jobrunr.scheduling.BackgroundJob;
+import org.jobrunr.scheduling.cron.Cron;
 import org.jobrunr.storage.InMemoryStorageProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.Instant;
 
 /**
  * Main class
@@ -24,6 +27,10 @@ public class Main {
                .initialize();
 
         BackgroundJob.enqueue(() -> System.out.println("BackgroundJob.enqueue"));
+
+        BackgroundJob.schedule(Instant.now().plusSeconds(10), () -> System.out.println("BackgroundJob.schedule in 10 seconds"));
+
+        BackgroundJob.scheduleRecurrently(Cron.every15seconds(), () -> System.out.println("BackgroundJob.scheduleRecurrently each 15 seconds"));
 
         // keep dashboard running by blocking the main thread
         Thread.currentThread().join();
